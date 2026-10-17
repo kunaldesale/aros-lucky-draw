@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AROS R13 Fun Fair — Lucky Draw</title>
+<style>
+:root{--navy:#173c55;--gold:#f3c969;--bg:#f3f6f8;--ink:#152632;--muted:#60717b;--green:#18864b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:var(--navy);color:white;padding:28px 18px;text-align:center}header .ticket{font-size:36px}header h1{margin:6px 0;font-size:clamp(24px,4vw,36px)}header p{margin:0;color:#dbe7ed}
+main{max-width:900px;margin:22px auto;padding:0 14px}.panel{background:white;border-radius:18px;padding:20px;margin:14px 0;box-shadow:0 4px 20px #1232}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:#edf2f5;border-radius:12px;padding:14px;text-align:center}.stat strong{display:block;font-size:26px;color:var(--navy)}
+label{display:block;font-weight:650;margin:12px 0 5px}input{width:100%;padding:12px;border:1px solid #c6d0d6;border-radius:10px;font:inherit;background:white}
+button,.filelabel{border:0;border-radius:11px;padding:12px 16px;font:inherit;font-weight:700;cursor:pointer;background:var(--navy);color:white;display:inline-block;text-align:center}
+button.secondary,.filelabel.secondary{background:#e8eef2;color:var(--navy)}button.gold{background:var(--gold);color:#172b37}button:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.status{padding:12px;border-radius:10px;background:#edf2f5;margin-top:12px}.small{font-size:13px;color:var(--muted)}.entries{overflow:auto}table{border-collapse:collapse;width:100%;min-width:450px}th,td{text-align:left;padding:10px;border-bottom:1px solid #e3e8eb}th{background:#edf2f5}
+.winner{display:none;text-align:center;border:2px solid #d8ad46;background:#fffaf0}.winner.show{display:block}.winner .trophy{font-size:52px}.winner h2{font-size:clamp(28px,5vw,44px);margin:8px 0}.winner .flat{font-size:22px;color:#8b6410;font-weight:800}
+#csvFile{display:none}.privacy{font-size:13px;color:var(--muted)}
+@media(max-width:560px){.stats{grid-template-columns:1fr 1fr 1fr}.panel{padding:15px}.actions button,.actions .filelabel{flex:1 1 100%}}
+</style>
+</head>
+<body>
+<header><div class="ticket">🎟️</div><h1>AROS R13 Fun Fair</h1><p>Lucky Draw · Committee Screen</p></header>
+<main>
+<section class="panel">
+<h2>1. Load the final eligible entries</h2>
+<p>After registration closes, download your Google Sheets register as Excel (.xlsx) or CSV and upload it here. The draw runs locally in this browser; no data is sent to a server.</p>
+<label class="filelabel" for="csvFile">Choose Excel / CSV file</label><input id="csvFile" type="file" accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+<p class="small">The file should include Wing, Flat Number and Resident Name columns. Excel (.xlsx) and CSV are supported. Entries are unique by Wing + Flat Number, so Wing A Flat 101 and Wing B Flat 101 are both allowed.</p>
+<div class="actions"><button id="demoBtn" class="secondary">Load demo entries</button><button id="clearBtn" class="secondary">Clear entries</button></div>
+<div id="status" class="status" role="status">No entries loaded yet.</div>
+</section>
+<section class="panel">
+<div class="stats"><div class="stat"><strong id="entryCount">0</strong>Eligible entries</div><div class="stat"><strong id="flatCount">0</strong>Unique Wing/Flats</div><div class="stat"><strong id="drawState">Ready</strong>Draw status</div></div>
+<h2>2. Review entries</h2><p class="small">Duplicate Wing + Flat combinations are reduced to one entry (the first occurrence). The same flat number in different wings is allowed. Review the final list before drawing.</p>
+<div class="entries"><table><thead><tr><th>Entry #</th><th>Wing</th><th>Flat Number</th><th>Resident Name</th></tr></thead><tbody id="entryRows"><tr><td colspan="4">No entries loaded</td></tr></tbody></table></div>
+</section>
+<section class="panel">
+<h2>3. Conduct the draw</h2>
+<p>Once the committee confirms the final eligible list, start the draw. Each eligible flat has an equal chance.</p>
+<div class="actions"><button id="drawBtn" class="gold" disabled>🎉 Pick random winner</button><button id="exportBtn" class="secondary" disabled>Export reviewed entries CSV</button><button id="printBtn" class="secondary">Print / Save winner</button></div>
+<p class="privacy">Privacy: the winner screen shows only the resident name and flat number. Mobile numbers are not displayed.</p>
+</section>
+<section id="winner" class="panel winner" aria-live="polite"><div class="trophy">🏆</div><p>AROS R13 FUN FAIR LUCKY DRAW WINNER</p><h2 id="winnerName"></h2><div id="winnerFlat" class="flat"></div><p id="winnerEntry"></p><p>Congratulations!</p></section>
+</main>
+<script>
+let entries=[], winner=null, drawClosed=false;
+const $=id=>document.getElementById(id);
+function norm(s){return String(s||'').trim().toLowerCase().replace(/[^a-z0-9]/g,'')}
+function parseCSV(text){
+  const rows=[]; let row=[], field='', quoted=false;
+  for(let i=0;i<text.length;i++){const c=text[i],n=text[i+1];
+    if(c==='"'&&quoted&&n==='"'){field+='"';i++}
+    else if(c==='"'){quoted=!quoted}
+    else if(c===','&&!quoted){row.push(field);field=''}
+    else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&n==='\n')i++;row.push(field);if(row.some(v=>v.trim()))rows.push(row);row=[];field=''}
+    else field+=c;
+  }
+  row.push(field);if(row.some(v=>v.trim()))rows.push(row);return rows;
+}
+function findCol(headers, choices){return headers.findIndex(h=>choices.includes(norm(h)))}
+function importRows(rows){
+  if(rows.length<2) throw Error('The file has no response rows.');
+  const h=rows[0].map(v=>norm(v));
+  const wi=findCol(h,['wing','wingname','block','buildingwing']);
+  const fi=findCol(h,['flatnumber','flatno','flat','flatnum','apartmentnumber','unitnumber','flatnumber']);
+  const ni=findCol(h,['residentname','name','fullname','nameofresident','residentsname']);
+  if(wi<0||fi<0||ni<0) throw Error('Could not identify Wing, Flat Number and Resident Name columns. Please ensure the first row has headings such as “Wing”, “Flat Number” and “Resident Name”.');
+  const seen=new Set(), clean=[];
+  for(const r of rows.slice(1)){
+    const wing=String(r[wi]??'').trim(), flat=String(r[fi]??'').trim().replace(/^(\d+)\.0+$/, '$1'), name=String(r[ni]??'').trim();
+    if(!wing||!flat||!name)continue;
+    const key=wing.toUpperCase().replace(/\s+/g,'').replace(/[^A-Z0-9]/g,'')+'|'+flat.toUpperCase().replace(/\s+/g,'').replace(/[^A-Z0-9/-]/g,'');
+    if(seen.has(key))continue;
+    seen.add(key);clean.push({wing,flat,name});
+  }
+  if(!clean.length)throw Error('No valid entries found. Check that Wing, Flat Number and Resident Name are filled in.');
+  entries=clean;winner=null;drawClosed=false;render();$('winner').classList.remove('show');$('status').textContent=`Loaded ${entries.length} eligible entries. Duplicate Wing + Flat combinations and blank rows were excluded. Please review before drawing.`;
+}
+function importCSV(text){
+  const rows=parseCSV(text);
+  importRows(rows);
+}
+async function unzipXlsx(arrayBuffer){
+  const bytes = new Uint8Array(arrayBuffer);
+  const view = new DataView(arrayBuffer);
+  const decoder = new TextDecoder('utf-8');
+
+  // Find ZIP end-of-central-directory record.
+  let eocd = -1;
+  const min = Math.max(0, bytes.length - 65557);
+  for(let i=bytes.length-22;i>=min;i--){
+    if(view.getUint32(i,true)===0x06054b50){eocd=i;break;}
+  }
+  if(eocd<0) throw Error('This does not look like a valid .xlsx file. Please download it again from Google Sheets.');
+  const count=view.getUint16(eocd+10,true);
+  const centralOffset=view.getUint32(eocd+16,true);
+  const files={};
+  let p=centralOffset;
+  for(let i=0;i<count;i++){
+    if(view.getUint32(p,true)!==0x02014b50) break;
+    const method=view.getUint16(p+10,true);
+    const compSize=view.getUint32(p+20,true);
+    const nameLen=view.getUint16(p+28,true);
+    const extraLen=view.getUint16(p+30,true);
+    const commentLen=view.getUint16(p+32,true);
+    const localOffset=view.getUint32(p+42,true);
+    const name=decoder.decode(bytes.slice(p+46,p+46+nameLen));
+    files[name]={method,compSize,localOffset};
+    p+=46+nameLen+extraLen+commentLen;
+  }
+  async function getText(name){
+    const f=files[name]; if(!f) return null;
+    const o=f.localOffset;
+    if(view.getUint32(o,true)!==0x04034b50) throw Error('Could not read the Excel workbook structure.');
+    const nameLen=view.getUint16(o+26,true), extraLen=view.getUint16(o+28,true);
+    const start=o+30+nameLen+extraLen;
+    const compressed=bytes.slice(start,start+f.compSize);
+    let raw;
+    if(f.method===0) raw=compressed;
+    else if(f.method===8){
+      if(typeof DecompressionStream==='undefined') throw Error('This browser cannot open Excel files directly. Please open the HTML in a recent Safari or Chrome browser, or export the register as CSV.');
+      let stream;
+      try { stream=new Blob([compressed]).stream().pipeThrough(new DecompressionStream('deflate-raw')); }
+      catch(e){ throw Error('This browser does not support the Excel file format reader. Please open the HTML in a recent Safari or Chrome browser, or export the register as CSV.'); }
+      raw=new Uint8Array(await new Response(stream).arrayBuffer());
+    } else throw Error('This Excel file uses an unsupported compression format.');
+    return decoder.decode(raw);
+  }
+
+  const sheetPath = files['xl/worksheets/sheet1.xml'] ? 'xl/worksheets/sheet1.xml' :
+    Object.keys(files).find(n=>/^xl\/worksheets\/sheet\d+\.xml$/.test(n));
+  if(!sheetPath) throw Error('Could not find a worksheet inside this Excel file.');
+  const sheetText=await getText(sheetPath);
+  const sharedText=await getText('xl/sharedStrings.xml');
+  const parser=new DOMParser();
+  const sheetDoc=parser.parseFromString(sheetText,'application/xml');
+  if(sheetDoc.querySelector('parsererror')) throw Error('The Excel worksheet could not be read.');
+  let shared=[];
+  if(sharedText){
+    const sd=parser.parseFromString(sharedText,'application/xml');
+    shared=Array.from(sd.getElementsByTagNameNS('*','si')).map(si=>
+      Array.from(si.getElementsByTagNameNS('*','t')).map(t=>t.textContent||'').join('')
+    );
+  }
+  function colIndex(ref){
+    const letters=(String(ref).match(/^[A-Z]+/i)||['A'])[0].toUpperCase();
+    let n=0; for(const ch of letters)n=n*26+ch.charCodeAt(0)-64; return n-1;
+  }
+  const rows=[];
+  for(const rowEl of Array.from(sheetDoc.getElementsByTagNameNS('*','row'))){
+    const rowIndex=Math.max(0,Number(rowEl.getAttribute('r')||rows.length)-1);
+    const row=[];
+    for(const c of Array.from(rowEl.getElementsByTagNameNS('*','c'))){
+      const idx=colIndex(c.getAttribute('r')||'A1');
+      const type=c.getAttribute('t');
+      const v=c.getElementsByTagNameNS('*','v')[0];
+      let value=v ? v.textContent : '';
+      if(type==='s') value=shared[Number(value)] ?? '';
+      else if(type==='inlineStr') value=Array.from(c.getElementsByTagNameNS('*','t')).map(t=>t.textContent||'').join('');
+      else if(type==='b') value=value==='1'?'TRUE':'FALSE';
+      row[idx]=value;
+    }
+    rows[rowIndex]=row;
+  }
+  return rows.map(r=>r||[]);
+}
+async function importExcel(arrayBuffer){
+  const rows=await unzipXlsx(arrayBuffer);
+  importRows(rows);
+}
+function render(){
+ $('entryCount').textContent=entries.length;$('flatCount').textContent=new Set(entries.map(e=>(e.wing||'').toUpperCase().replace(/\s+/g,'')+'|'+e.flat.toUpperCase().replace(/\s+/g,''))).size;
+ $('drawState').textContent=winner?'Completed':drawClosed?'Closed':'Ready';
+ $('drawBtn').disabled=!entries.length||!!winner;
+ $('exportBtn').disabled=!entries.length;
+ const body=$('entryRows');body.innerHTML='';
+ if(!entries.length){body.innerHTML='<tr><td colspan="4">No entries loaded</td></tr>';return}
+ entries.forEach((e,i)=>{const tr=document.createElement('tr');[i+1,e.wing||'',e.flat,e.name].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td)});body.appendChild(tr)});
+}
+$('csvFile').addEventListener('change',async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{
+    const lower=f.name.toLowerCase();
+    if(lower.endsWith('.csv')) importCSV(await f.text());
+    else if(lower.endsWith('.xlsx')) await importExcel(await f.arrayBuffer());
+    else if(lower.endsWith('.xls')) throw Error('Please download the Google Sheets file as Excel Workbook (.xlsx), not the older .xls format.');
+    else throw Error('Please select an Excel (.xlsx) or CSV file.');
+  }catch(err){$('status').textContent=err.message||'Could not read the selected file.'}
+});
+$('demoBtn').addEventListener('click',()=>{entries=[{wing:'A',flat:'101',name:'Sample Resident A'},{wing:'A',flat:'204',name:'Sample Resident B'},{wing:'B',flat:'101',name:'Sample Resident C'},{wing:'C',flat:'412',name:'Sample Resident D'},{wing:'C',flat:'509',name:'Sample Resident E'}];winner=null;drawClosed=false;$('winner').classList.remove('show');render();$('status').textContent='Demo entries loaded. These are fictional sample names; clear them before importing real entries.'});
+$('clearBtn').addEventListener('click',()=>{entries=[];winner=null;drawClosed=false;$('winner').classList.remove('show');render();$('status').textContent='Entries cleared.';$('csvFile').value=''});
+$('drawBtn').addEventListener('click',()=>{if(!entries.length||winner)return;if(!confirm(`Draw from ${entries.length} eligible flats now? Confirm that registration is closed and the list has been reviewed.`))return;drawClosed=true;const i=Math.floor(Math.random()*entries.length);winner={...entries[i],number:i+1};$('winnerName').textContent=winner.name;$('winnerFlat').textContent=(winner.wing?'Wing '+winner.wing+' · ':'')+'Flat '+winner.flat;$('winnerEntry').textContent='Winning entry #'+winner.number;$('winner').classList.add('show');$('status').textContent='Winner selected. Keep the final CSV and record the draw for transparency.';render();$('winner').scrollIntoView({behavior:'smooth',block:'center'})});
+$('exportBtn').addEventListener('click',()=>{const lines=[['Entry ID','Wing','Flat Number','Resident Name'],...entries.map((e,i)=>[i+1,e.wing||'',e.flat,e.name])];const csv=lines.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='AROS_Lucky_Draw_Reviewed_Entries.csv';a.click();URL.revokeObjectURL(a.href)});
+$('printBtn').addEventListener('click',()=>window.print());
+render();
+</script>
+</body>
+</html>
