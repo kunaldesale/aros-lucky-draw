@@ -1,72 +1,80 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AROS R13 Fun Fair - Lucky Draw</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AROS R13 Fun Fair 2026 — Lucky Draw</title>
 <style>
-:root{--maroon:#8f1021;--red:#b51f2e;--gold:#e8b84d;--cream:#fff5d9;--paper:#fffdf5;--ink:#45201b;--muted:#785c4f;--green:#246746}
+:root{--maroon:#8f1021;--red:#b51f2e;--gold:#e8b84d;--gold2:#ffd978;--cream:#fff5d9;--paper:#fffdf5;--ink:#45201b;--muted:#785c4f;--green:#246746;--line:#efd89a}
 *{box-sizing:border-box}
-body{margin:0;color:var(--ink);font-family:Georgia,"Times New Roman",serif;background:radial-gradient(circle at top,#fff6dc,#f8e6b7 50%,#f6e8d2);min-height:100vh}
-body:before{content:"✦ ❋ ✦ ❋ ✦ ❋ ✦";display:block;text-align:center;color:var(--gold);letter-spacing:8px;padding:8px;background:var(--maroon)}
-header{text-align:center;padding:24px 14px;color:white;background:linear-gradient(130deg,#760c1b,#b51f2e,#790c1c);border-bottom:5px solid var(--gold)}
-.brand{font-family:Arial,sans-serif;font-size:clamp(30px,6vw,48px);font-weight:900;letter-spacing:2px;color:white}
-.brand span{color:#65c69b}
-.brand small{display:block;font-size:11px;letter-spacing:4px;color:#fff1d3}
-.kicker{color:#ffd978;font-weight:bold;letter-spacing:2px;text-transform:uppercase;font-size:12px;margin-top:16px}
-header h1{font-size:clamp(27px,5vw,42px);margin:8px 0;color:#fff4ce}
-header p{margin:0;color:#fff1d3}
+body{margin:0;color:var(--ink);font-family:Georgia,"Times New Roman",serif;background:radial-gradient(circle at top,#fff6dc 0,#f8e6b7 38%,#f6e8d2 100%);min-height:100vh}
+body:before{content:"✦  ❋  ✦  ❋  ✦  ❋  ✦";display:block;text-align:center;color:#b88423;letter-spacing:10px;padding:7px 0;background:var(--maroon);font-size:13px}
+header{position:relative;text-align:center;padding:18px 14px 22px;color:#fff9e8;background:linear-gradient(130deg,#760c1b,#b51f2e 55%,#790c1c);border-bottom:5px solid var(--gold);box-shadow:0 5px 16px #6c171933}
+.kicker{color:var(--gold2);font-weight:bold;letter-spacing:2px;text-transform:uppercase;font-size:12px}
+header h1{font-size:clamp(25px,5vw,42px);line-height:1.1;margin:7px 0;color:#fff4ce;text-shadow:0 2px 0 #5e0a16}
+header p{margin:0;font-size:15px;color:#fff1d3}
 main{max-width:1040px;margin:20px auto;padding:0 14px 35px}
-.ribbon{background:linear-gradient(90deg,#7b0d1c,#b51f2e,#7b0d1c);color:#fff2cb;text-align:center;padding:12px;border:2px solid var(--gold);border-radius:12px;font-weight:bold;margin-bottom:14px}
-.panel{background:var(--paper);border:1px solid #e6c66e;border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 5px 16px #6d2a1712}
-.panel h2{margin-top:0;color:var(--maroon);font-size:22px}
+.ribbon{background:linear-gradient(90deg,#7b0d1c,#b51f2e,#7b0d1c);color:#fff2cb;text-align:center;padding:10px;border:2px solid var(--gold);border-radius:12px;font-weight:bold;letter-spacing:.7px;margin-bottom:14px}
+.panel{background:var(--paper);border:1px solid #e6c66e;border-radius:16px;padding:19px;margin:14px 0;box-shadow:0 5px 16px #6d2a1712;position:relative}
+.panel h2{margin:0 0 10px;color:var(--maroon);font-size:22px}
 .panel h3{color:var(--maroon)}
-.intro{font-size:15px;line-height:1.55;color:var(--muted)}
+.intro{font-size:15px;line-height:1.55;margin:0 0 12px;color:var(--muted)}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.stat{background:linear-gradient(150deg,#fff8e4,#f9e8bb);border:1px solid #ebcf80;border-radius:12px;padding:14px 8px;text-align:center}
+.stat{background:linear-gradient(150deg,#fff8e4,#f9e8bb);border:1px solid #ebcf80;border-radius:12px;padding:13px 8px;text-align:center}
 .stat strong{display:block;font-size:clamp(24px,4vw,32px);color:var(--maroon)}
 .stat small{display:block;color:#775344;font-size:12px}
-button,.filelabel{border:1px solid #e3b847;border-radius:10px;padding:13px 16px;font:700 15px/1.3 system-ui,sans-serif;cursor:pointer;background:linear-gradient(#b72332,#8c1020);color:#fff8e4;display:inline-block;text-align:center;box-shadow:0 2px 0 #6c0b19}
+button,.filelabel{border:1px solid #e3b847;border-radius:10px;padding:12px 15px;font:700 15px/1.2 system-ui,sans-serif;cursor:pointer;background:linear-gradient(#b72332,#8c1020);color:#fff8e4;display:inline-block;text-align:center;box-shadow:0 2px 0 #6c0b19}
 button.secondary,.filelabel.secondary{background:linear-gradient(#fff8e5,#f3dfaa);color:var(--maroon);border-color:#e3c26b}
 button.gold{background:linear-gradient(#ffe49a,#e7b53f);color:#60101a;border-color:#d39a24;font-size:17px}
 button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
 .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 #fileInput{display:none}
 .status{padding:12px;border-radius:10px;background:#fff4d4;border:1px solid #edd48d;margin-top:12px;color:#663c27}
-.small{font:13px/1.5 system-ui,sans-serif;color:var(--muted)}
+.small,.privacy{font:13px/1.45 system-ui,sans-serif;color:var(--muted)}
 .entries{overflow:auto;border:1px solid #f0dfb3;border-radius:9px}
 table{border-collapse:collapse;width:100%;min-width:470px;font:14px/1.4 system-ui,sans-serif}
 th,td{text-align:left;padding:10px;border-bottom:1px solid #f0e3c3}
 th{background:#f8e6b5;color:#6e1721}
 .preview{display:none;margin-top:15px}
 .preview.show{display:block}
-.eligible,.history-winner{color:var(--green);font-weight:700}
-.duplicate,.incomplete,.history-absent{color:#a0441b;font-weight:700}
-.attendance-select{padding:8px;border:1px solid #e3c26b;border-radius:8px;background:#fff8e5;color:#6e1721;font-weight:700;max-width:130px}
-.winner{display:none;text-align:center;border:3px solid var(--gold);background:radial-gradient(circle,#fff9e8,#f9e3a7)}
+.eligible{color:var(--green);font-weight:700}
+.duplicate,.incomplete{color:#a0441b;font-weight:700}
+.winner{display:none;text-align:center;border:3px solid var(--gold);background:radial-gradient(circle,#fff9e8,#f9e3a7);overflow:hidden}
 .winner.show{display:block}
 .winner:before{content:"✦ ❋ ✦ ❋ ✦ ❋ ✦";display:block;color:#a8791c;letter-spacing:5px;font-size:18px}
-.spinner{display:none;margin:20px auto 12px;width:160px;height:160px;border-radius:50%;border:12px solid var(--gold);border-top-color:var(--maroon);border-right-color:#fff1bd;border-bottom-color:var(--red);animation:spin .55s linear infinite;box-shadow:0 0 0 6px #e9bd5540}
+.spinner{display:none;margin:20px auto 12px;width:160px;height:160px;border-radius:50%;border:12px solid var(--gold);border-top-color:var(--maroon);border-right-color:#fff1bd;border-bottom-color:#b51f2e;animation:spin .55s linear infinite;box-shadow:0 0 0 6px #e9bd5540}
 .spinner.show{display:block}
 @keyframes spin{to{transform:rotate(360deg)}}
 .trophy{font-size:54px}
 .spinlabel{font:700 17px system-ui,sans-serif;color:var(--maroon)}
 .winner h2{font-size:clamp(27px,5vw,43px);color:var(--maroon);margin:8px 0}
 .winner .flat{font:800 21px system-ui,sans-serif;color:#875d10}
-.winner-list{ text-align:left;max-width:560px;margin:20px auto 0;background:#fff9e9;border-radius:10px;padding:10px 18px}
+.winner-list{text-align:left;max-width:560px;margin:20px auto 0;background:#fff9e9;border-radius:10px;padding:10px 18px}
 .winner-list li{padding:8px;border-bottom:1px solid #eedba7;font-family:system-ui,sans-serif}
 footer{text-align:center;padding:18px;color:#fff1ce;background:var(--maroon);border-top:4px solid var(--gold);font-size:13px}
-@media(max-width:600px){.stats{grid-template-columns:1fr 1fr}.panel{padding:15px}.actions button,.actions .filelabel{flex:1 1 100%}}
-@media print{body{background:white}body:before,footer,.no-print{display:none!important}header{padding:10px}.panel{box-shadow:none;break-inside:avoid}.winner{display:block}}
+.attendance-select{padding:8px;border:1px solid #e3c26b;border-radius:8px;background:#fff8e5;color:#6e1721;font-weight:700;max-width:130px}
+.history-absent{color:#a0441b}
+.disqualified{display:inline-block;margin-left:6px;padding:3px 7px;border-radius:6px;background:#f8dddd;color:#9f1d2b;font-size:.78em;font-weight:800}
+.history-winner{color:#246746}
+@media(max-width:600px){
+ .stats{grid-template-columns:1fr 1fr}
+ .panel{padding:14px}
+ .actions button,.actions .filelabel{flex:1 1 100%}
+}
+@media print{
+ body{background:white}
+ body:before,footer,.no-print{display:none!important}
+ header{padding:10px}
+ .panel{box-shadow:none;break-inside:avoid}
+ .winner{display:block}
+}
 </style>
 </head>
 <body>
 <header>
-  <div class="brand">AROS <span>R13</span><small>LIFE. LIVED. FULLY.</small></div>
-  <div class="kicker">Sharadiya Navratri Utsav 2026</div>
-  <h1>🎉 Fun Fair · Lucky Draw 🎉</h1>
-  <p>AROS R13 Fun Fair</p>
+<div class="kicker">Sharadiya Navratri Utsav 2026</div>
+<h1>Fun Fair · Lucky Draw</h1>
+<p>AROS R13 Fun Fair • Sunday, 18 October 2026</p>
 </header>
 
 <main>
@@ -74,24 +82,30 @@ footer{text-align:center;padding:18px;color:#fff1ce;background:var(--maroon);bor
 
 <section class="panel no-print">
 <h2>① Registration File</h2>
-<p class="intro">Upload the final Excel or CSV registration list. Duplicate Wing + Flat Number combinations are excluded automatically.</p>
+<p class="intro">Choose the final Excel or CSV registration list. The dashboard checks duplicate Wing + Flat Number combinations and prepares the eligible draw list.</p>
 <label class="filelabel" for="fileInput">📂 Choose Excel / CSV File</label>
-<input id="fileInput" type="file" accept=".xlsx,.csv">
+<input id="fileInput" type="file" accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
 <div class="actions">
 <button id="viewBtn" class="secondary" disabled>👁 View Uploaded File</button>
 <button id="clearBtn" class="secondary">Clear / Start Over</button>
 </div>
-<p class="small">Required headings: Wing, Flat Number, Resident Name. Data stays in this browser.</p>
-<div id="status" class="status">Waiting for the organizer to upload the final registration list.</div>
+<p class="small">Required headings in the first row: <b>Wing</b>, <b>Flat Number</b>, <b>Resident Name</b>. Data stays in this browser. No registration list is uploaded to a server.</p>
+<div id="status" class="status" role="status">Waiting for the organizer to upload the final registration list.</div>
 <div id="preview" class="preview">
 <h3>Uploaded File — Row-by-row Review</h3>
 <p id="previewSummary" class="small"></p>
-<div class="entries"><table><thead><tr><th>Row</th><th>Wing</th><th>Flat</th><th>Resident</th><th>Status</th></tr></thead><tbody id="previewRows"></tbody></table></div>
+<div class="entries">
+<table>
+<thead><tr><th>Row</th><th>Wing</th><th>Flat</th><th>Resident</th><th>Status</th></tr></thead>
+<tbody id="previewRows"></tbody>
+</table>
+</div>
 </div>
 </section>
 
 <section class="panel">
 <h2>② Registration Summary</h2>
+<p class="intro">Review these counts before the draw. Duplicate rows are excluded; only the first entry for each Wing + Flat Number remains eligible.</p>
 <div class="stats">
 <div class="stat"><strong id="total">0</strong><small>Total valid registrations</small></div>
 <div class="stat"><strong id="dupes">0</strong><small>Duplicate rows excluded</small></div>
@@ -99,19 +113,24 @@ footer{text-align:center;padding:18px;color:#fff1ce;background:var(--maroon);bor
 <div class="stat"><strong id="remaining">0</strong><small>Entries remaining</small></div>
 </div>
 <h3>Eligible Entries</h3>
-<div class="entries"><table><thead><tr><th>#</th><th>Wing</th><th>Flat Number</th><th>Resident Name</th></tr></thead><tbody id="entries"><tr><td colspan="4">Upload the registration file to view eligible entries.</td></tr></tbody></table></div>
+<div class="entries">
+<table>
+<thead><tr><th>#</th><th>Wing</th><th>Flat Number</th><th>Resident Name</th></tr></thead>
+<tbody id="entries"><tr><td colspan="4">Upload the registration file to view eligible entries.</td></tr></tbody>
+</table>
+</div>
 <p id="drawState" class="small">Draw not started.</p>
 </section>
 
 <section class="panel no-print">
 <h2>③ Lucky Draw — Select Three Winners</h2>
-<p class="intro">Draw three original winners first. Mark each winner Present or Absent below. For every absent winner, draw a replacement from the remaining eligible entries.</p>
+<p class="intro">When the committee is ready, tap the draw button. The wheel animation runs and reveals one winner. That winner is removed from the pool before the next round.</p>
 <div class="actions">
 <button id="drawBtn" class="gold" disabled>🎡 Draw First Winner</button>
 <button id="exportBtn" class="secondary" disabled>⬇ Export Results CSV</button>
 <button id="printBtn" class="secondary">🖨 Print / Save Results</button>
 </div>
-<p class="small">Each entry can only be selected once. Original winners and replacement winners remain in the selection history.</p>
+<p class="small">Only the organizer should operate this dashboard. This standalone page does not synchronize results to other devices automatically.</p>
 </section>
 
 <section id="winner" class="panel winner" aria-live="polite">
@@ -122,216 +141,492 @@ footer{text-align:center;padding:18px;color:#fff1ce;background:var(--maroon);bor
 <h2 id="winnerName">Best of luck to all residents!</h2>
 <div id="winnerFlat" class="flat"></div>
 <p id="winnerNo"></p>
-<div class="winner-list"><h3>🏆 Winners Selected</h3><ol id="winnersList"><li>Winners will appear here after the draw.</li></ol></div>
+<div class="winner-list">
+<h3>🏆 Winners Selected</h3>
+<ol id="winnersList"><li>Winners will appear here after each draw.</li></ol>
+</div>
 </section>
 
 <section class="panel" id="attendancePanel" style="display:none">
 <h2>④ Winner Attendance & Replacement</h2>
-<p class="intro">Mark each winner Present or Absent. An absent winner does not count toward the final three. Draw replacements until three winners are confirmed present.</p>
+<p class="intro">Mark each selected winner Present or Absent. An absent winner is excluded from the final three, and you can draw a replacement from the remaining eligible entries.</p>
 <div class="stats">
 <div class="stat"><strong id="confirmedCount">0</strong><small>Confirmed winners</small></div>
-<div class="stat"><strong id="neededCount">3</strong><small>More confirmations needed</small></div>
+<div class="stat"><strong id="neededCount">3</strong><small>Replacements needed</small></div>
 </div>
-<div class="entries" style="margin-top:12px"><table><thead><tr><th>Selection</th><th>Resident</th><th>Attendance</th><th>Status</th></tr></thead><tbody id="attendanceRows"></tbody></table></div>
-<div class="actions"><button id="replacementBtn" class="gold" disabled>🎡 Draw Replacement Winner</button></div>
-<p id="replacementStatus" class="small">Mark attendance after selecting the original winners.</p>
+<div class="entries" style="margin-top:12px">
+<table>
+<thead><tr><th>Winner</th><th>Resident</th><th>Attendance</th><th>Action</th></tr></thead>
+<tbody id="attendanceRows"></tbody>
+</table>
+</div>
+<div class="actions">
+<button id="replacementBtn" class="gold" disabled>🎡 Draw Replacement Winner</button>
+</div>
+<p id="replacementStatus" class="small">Mark attendance after the initial three winners are selected.</p>
 <h3>Selection History</h3>
 <ol id="selectionHistory"></ol>
 </section>
 </main>
 
-<footer>AROS R13 • Life. Lived. Fully. • Let’s celebrate together!</footer>
+<footer>AROS R13 • Fun Fair Lucky Draw 2026</footer>
 
 <script>
-let eligible=[],allUnique=[],rawRows=[],winners=[],totalValid=0,duplicateCount=0,spinning=false;
-let attendance={},selectionHistory=[];
-const $=id=>document.getElementById(id);
+const $ = id => document.getElementById(id);
+let eligible = [];
+let allUnique = [];
+let rawRows = [];
+let winners = [];
+let attendance = {};
+let selectionHistory = [];
+let totalValid = 0;
+let duplicateCount = 0;
+let spinning = false;
 
-function norm(v){return String(v??"").trim().toLowerCase().replace(/[^a-z0-9]/g,"")}
-function parseCSV(text){
- const rows=[];let row=[],field="",quoted=false;
- for(let i=0;i<text.length;i++){
-  const c=text[i],n=text[i+1];
-  if(c==='"'&&quoted&&n==='"'){field+='"';i++}
-  else if(c==='"')quoted=!quoted;
-  else if(c===","&&!quoted){row.push(field);field=""}
-  else if((c==="\n"||c==="\r")&&!quoted){if(c==="\r"&&n==="\n")i++;row.push(field);if(row.some(x=>String(x).trim()))rows.push(row);row=[];field=""}
-  else field+=c;
- }
- row.push(field);if(row.some(x=>String(x).trim()))rows.push(row);return rows;
+function normalizeHeader(value) {
+ return String(value || "").trim().toLowerCase().replace(/[^a-z0-9]/g, "");
 }
-function findCol(h,choices){return h.findIndex(x=>choices.includes(norm(x)))}
-function importRows(rows){
- if(rows.length<2)throw Error("The file has no registration rows.");
- const h=rows[0].map(norm);
- const wi=findCol(h,["wing","wingname","block","buildingwing"]);
- const fi=findCol(h,["flatnumber","flatno","flat","flatnum","apartmentnumber","unitnumber"]);
- const ni=findCol(h,["residentname","name","fullname","nameofresident","residentsname"]);
- if(wi<0||fi<0||ni<0)throw Error("Required headings not found. Use Wing, Flat Number and Resident Name.");
- const seen=new Set(),unique=[];rawRows=[];let valid=0;
- for(let i=1;i<rows.length;i++){
-  const r=rows[i]||[],wing=String(r[wi]??"").trim(),flat=String(r[fi]??"").trim().replace(/^(\d+)\.0+$/,"$1"),name=String(r[ni]??"").trim();
-  if(!wing&&!flat&&!name)continue;
-  if(!wing||!flat||!name){rawRows.push({row:i+1,wing,flat,name,status:"Incomplete — excluded"});continue}
+
+function parseCSV(text) {
+ const rows = [];
+ let row = [], cell = "", quoted = false;
+ text = text.replace(/^\uFEFF/, "");
+ for (let i = 0; i < text.length; i++) {
+  const ch = text[i], next = text[i + 1];
+  if (ch === '"' && quoted && next === '"') {
+   cell += '"'; i++;
+  } else if (ch === '"') {
+   quoted = !quoted;
+  } else if (ch === "," && !quoted) {
+   row.push(cell); cell = "";
+  } else if ((ch === "\n" || ch === "\r") && !quoted) {
+   if (ch === "\r" && next === "\n") i++;
+   row.push(cell);
+   if (row.some(v => String(v).trim() !== "")) rows.push(row);
+   row = []; cell = "";
+  } else {
+   cell += ch;
+  }
+ }
+ row.push(cell);
+ if (row.some(v => String(v).trim() !== "")) rows.push(row);
+ return rows;
+}
+
+function importRows(rows) {
+ if (!rows.length) throw Error("The file is empty.");
+ const headers = rows[0].map(normalizeHeader);
+ const wingIndex = headers.findIndex(h => ["wing","wingname","block"].includes(h));
+ const flatIndex = headers.findIndex(h => ["flat","flatnumber","flatno","unit","unitnumber"].includes(h));
+ const nameIndex = headers.findIndex(h => ["residentname","name","fullname","resident"].includes(h));
+
+ if (wingIndex < 0 || flatIndex < 0 || nameIndex < 0) {
+  throw Error("Required headings not found. Please use Wing, Flat Number, and Resident Name.");
+ }
+
+ const seen = new Set();
+ const unique = [];
+ const review = [];
+ let valid = 0, duplicates = 0;
+
+ rows.slice(1).forEach((r, index) => {
+  const wing = String(r[wingIndex] ?? "").trim();
+  const flat = String(r[flatIndex] ?? "").trim();
+  const name = String(r[nameIndex] ?? "").trim();
+  if (!wing && !flat && !name) return;
+
+  const rowNumber = index + 2;
+  if (!wing || !flat || !name) {
+   review.push({row:rowNumber,wing,flat,name,status:"Incomplete — excluded"});
+   return;
+  }
+
   valid++;
-  const key=wing.toUpperCase().replace(/[^A-Z0-9]/g,"")+"|"+flat.toUpperCase().replace(/\s+/g,"");
-  if(seen.has(key)){rawRows.push({row:i+1,wing,flat,name,status:"Duplicate — excluded"});continue}
-  seen.add(key);unique.push({wing,flat,name});rawRows.push({row:i+1,wing,flat,name,status:"Eligible"});
- }
- if(!unique.length)throw Error("No valid eligible entries found.");
- allUnique=unique;eligible=unique.slice();totalValid=valid;duplicateCount=valid-unique.length;
- winners=[];attendance={};selectionHistory=[];spinning=false;
- $("winner").classList.remove("show");$("viewBtn").disabled=false;
- $("status").textContent=`Loaded ${valid} valid registrations. ${duplicateCount} duplicate rows excluded. ${unique.length} unique entries eligible.`;
- render();showPreview(false);
+  const key = `${wing.toLowerCase()}|${flat.toLowerCase()}`;
+  if (seen.has(key)) {
+   duplicates++;
+   review.push({row:rowNumber,wing,flat,name,status:"Duplicate — excluded"});
+  } else {
+   seen.add(key);
+   const entry = {wing,flat,name};
+   unique.push(entry);
+   review.push({row:rowNumber,wing,flat,name,status:"Eligible"});
+  }
+ });
+
+ rawRows = review;
+ allUnique = unique;
+ eligible = unique.slice();
+ totalValid = valid;
+ duplicateCount = duplicates;
+ winners = [];
+ spinning = false;
+ attendance = {};
+ selectionHistory = [];
+
+ $("status").textContent = `File reviewed successfully. ${unique.length} unique entries are eligible. ${duplicates} duplicate rows excluded.`;
+ $("viewBtn").disabled = false;
+ $("preview").classList.remove("show");
+ $("winner").classList.remove("show");
+ render();
 }
 
-async function readXlsx(buffer){
- const b=new Uint8Array(buffer),v=new DataView(buffer),dec=new TextDecoder();let end=-1;
- for(let i=b.length-22;i>=Math.max(0,b.length-65557);i--)if(v.getUint32(i,true)===0x06054b50){end=i;break}
- if(end<0)throw Error("Invalid Excel file. Export it as CSV and upload the CSV.");
- const count=v.getUint16(end+10,true);let p=v.getUint32(end+16,true);const files={};
- for(let i=0;i<count;i++){
-  if(v.getUint32(p,true)!==0x02014b50)break;
-  const method=v.getUint16(p+10,true),size=v.getUint32(p+20,true),nl=v.getUint16(p+28,true),el=v.getUint16(p+30,true),cl=v.getUint16(p+32,true),off=v.getUint32(p+42,true),name=dec.decode(b.slice(p+46,p+46+nl));
-  files[name]={method,size,off};p+=46+nl+el+cl;
+async function readXlsx(buffer) {
+ if (!("DecompressionStream" in window)) {
+  throw Error("Excel reading is not supported in this browser. Please save the file as CSV and upload it.");
  }
- async function getText(name){
-  const f=files[name];if(!f)return null;const o=f.off,start=o+30+v.getUint16(o+26,true)+v.getUint16(o+28,true),data=b.slice(start,start+f.size);
-  if(f.method===0)return dec.decode(data);
-  if(f.method!==8||typeof DecompressionStream==="undefined")throw Error("This browser cannot read Excel directly. Export it as CSV.");
-  try{return await new Response(new Blob([data]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).text()}
-  catch{throw Error("Could not read Excel in this browser. Export the file as CSV and upload it.")}
- }
- const path=files["xl/worksheets/sheet1.xml"]?"xl/worksheets/sheet1.xml":Object.keys(files).find(n=>/^xl\/worksheets\/sheet\d+\.xml$/.test(n));
- if(!path)throw Error("No worksheet found.");
- const xml=await getText(path),ss=await getText("xl/sharedStrings.xml"),parser=new DOMParser(),doc=parser.parseFromString(xml,"application/xml");
- let shared=[];
- if(ss){const sd=parser.parseFromString(ss,"application/xml");shared=Array.from(sd.getElementsByTagNameNS("*","si")).map(si=>Array.from(si.getElementsByTagNameNS("*","t")).map(t=>t.textContent||"").join(""))}
- function col(ref){const letters=(String(ref).match(/^[A-Z]+/i)||["A"])[0].toUpperCase();let n=0;for(const c of letters)n=n*26+c.charCodeAt(0)-64;return n-1}
- const rows=[];
- for(const re of Array.from(doc.getElementsByTagNameNS("*","row"))){
-  const ri=Math.max(0,Number(re.getAttribute("r")||rows.length)-1),row=[];
-  for(const ce of Array.from(re.getElementsByTagNameNS("*","c"))){
-   const ci=col(ce.getAttribute("r")||"A1"),type=ce.getAttribute("t"),ve=ce.getElementsByTagNameNS("*","v")[0];let val=ve?ve.textContent:"";
-   if(type==="s")val=shared[Number(val)]??"";else if(type==="inlineStr")val=Array.from(ce.getElementsByTagNameNS("*","t")).map(t=>t.textContent||"").join("");row[ci]=val;
-  }rows[ri]=row;
- }
- return rows.map(r=>r||[]);
-}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+ const bytes = new Uint8Array(buffer);
+ const view = new DataView(buffer);
+ const decoder = new TextDecoder();
+ const files = {};
 
-function showPreview(force){
- const box=$("preview");
- if(force===true)box.classList.add("show");else if(force===false)box.classList.remove("show");else box.classList.toggle("show");
- $("previewSummary").textContent=`${rawRows.length} rows reviewed. Duplicate and incomplete rows are excluded.`;
- const body=$("previewRows");body.innerHTML="";
+ function u16(p){return view.getUint16(p,true)}
+ function u32(p){return view.getUint32(p,true)}
+
+ let eocd = -1;
+ for (let p = bytes.length - 22; p >= Math.max(0,bytes.length - 65557); p--) {
+  if (u32(p) === 0x06054b50) {eocd=p;break;}
+ }
+ if (eocd < 0) throw Error("Could not read this Excel file.");
+
+ const count = u16(eocd + 10);
+ let offset = u32(eocd + 16);
+
+ for (let i=0;i<count;i++) {
+  if (u32(offset)!==0x02014b50) break;
+  const method=u16(offset+10);
+  const compressed=u32(offset+20);
+  const nameLength=u16(offset+28);
+  const extraLength=u16(offset+30);
+  const commentLength=u16(offset+32);
+  const localOffset=u32(offset+42);
+  const name=decoder.decode(bytes.slice(offset+46,offset+46+nameLength));
+  const localNameLength=u16(localOffset+26);
+  const localExtraLength=u16(localOffset+28);
+  const dataStart=localOffset+30+localNameLength+localExtraLength;
+  const compressedData=bytes.slice(dataStart,dataStart+compressed);
+  let data;
+
+  if (method===0) {
+   data=compressedData;
+  } else if (method===8) {
+   const stream=new Blob([compressedData]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+   data=new Uint8Array(await new Response(stream).arrayBuffer());
+  } else {
+   throw Error("This Excel file uses an unsupported compression method.");
+  }
+
+  files[name]=decoder.decode(data);
+  offset += 46+nameLength+extraLength+commentLength;
+ }
+
+ const parser = new DOMParser();
+ const shared = files["xl/sharedStrings.xml"]
+  ? Array.from(parser.parseFromString(files["xl/sharedStrings.xml"],"application/xml").getElementsByTagNameNS("*","si"))
+    .map(si=>Array.from(si.getElementsByTagNameNS("*","t")).map(t=>t.textContent||"").join(""))
+  : [];
+
+ const workbook=parser.parseFromString(files["xl/workbook.xml"]||"","application/xml");
+ const firstSheet=workbook.getElementsByTagNameNS("*","sheet")[0];
+ if (!firstSheet) throw Error("No worksheet found in Excel file.");
+
+ const rels=parser.parseFromString(files["xl/_rels/workbook.xml.rels"]||"","application/xml");
+ const relationId=firstSheet.getAttribute("r:id");
+ let target="";
+ Array.from(rels.getElementsByTagNameNS("*","Relationship")).forEach(rel=>{
+  if(rel.getAttribute("Id")===relationId) target=rel.getAttribute("Target");
+ });
+ if(!target) target="worksheets/sheet1.xml";
+ target=target.replace(/^\/+/,"").replace(/^xl\//,"");
+ const sheetPath="xl/"+target;
+ const sheet=parser.parseFromString(files[sheetPath]||"","application/xml");
+ const sheetRows=Array.from(sheet.getElementsByTagNameNS("*","row"));
+
+ function colIndex(ref) {
+  const letters=(ref.match(/[A-Z]+/i)||["A"])[0].toUpperCase();
+  let n=0;
+  for(const c of letters)n=n*26+c.charCodeAt(0)-64;
+  return n-1;
+ }
+
+ return sheetRows.map(row=>{
+  const values=[];
+  Array.from(row.getElementsByTagNameNS("*","c")).forEach(cell=>{
+   const ref=cell.getAttribute("r")||"A1";
+   const col=colIndex(ref);
+   const type=cell.getAttribute("t");
+   const valueNode=cell.getElementsByTagNameNS("*","v")[0];
+   let value=valueNode?valueNode.textContent:"";
+   if(type==="s")value=shared[Number(value)]||"";
+   if(type==="inlineStr")value=Array.from(cell.getElementsByTagNameNS("*","t")).map(t=>t.textContent||"").join("");
+   values[col]=value;
+  });
+  return values.map(v=>v??"");
+ });
+}
+
+function esc(s) {
+ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function showPreview() {
+ $("preview").classList.toggle("show");
+ $("previewSummary").textContent = `${rawRows.length} non-empty rows reviewed. Duplicate and incomplete rows are excluded from the draw.`;
+ const body=$("previewRows");
+ body.innerHTML="";
  rawRows.forEach(r=>{
   const tr=document.createElement("tr");
   [r.row,r.wing||"—",r.flat||"—",r.name||"—",r.status].forEach((val,i)=>{
-   const td=document.createElement("td");td.textContent=val;
+   const td=document.createElement("td");
+   td.textContent=val;
    if(i===4)td.className=val==="Eligible"?"eligible":val.startsWith("Duplicate")?"duplicate":"incomplete";
    tr.appendChild(td);
-  });body.appendChild(tr);
+  });
+  body.appendChild(tr);
  });
 }
 
-function render(){
- $("total").textContent=totalValid;$("dupes").textContent=duplicateCount;$("unique").textContent=allUnique.length;$("remaining").textContent=eligible.length;
- $("drawState").textContent=spinning?"Lucky draw in progress…":winners.length>=3?"Three original winners selected":`${winners.length} of 3 original winners selected`;
- $("drawBtn").disabled=!eligible.length||winners.length>=3||spinning;
- $("drawBtn").textContent=winners.length>=3?"🏆 Original Draw Complete":`🎡 Draw ${["First","Second","Third"][winners.length]||"Next"} Winner`;
- $("exportBtn").disabled=!allUnique.length;
- const body=$("entries");body.innerHTML="";
- if(!eligible.length){body.innerHTML='<tr><td colspan="4">No remaining entries.</td></tr>'}
- else eligible.forEach((e,i)=>{const tr=document.createElement("tr");[i+1,e.wing,e.flat,e.name].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.appendChild(td)});body.appendChild(tr)});
+function render() {
  renderAttendance();
+ $("total").textContent=totalValid;
+ $("dupes").textContent=duplicateCount;
+ $("unique").textContent=allUnique.length;
+ $("remaining").textContent=eligible.length;
+ $("drawState").textContent=spinning?"Lucky draw in progress…":winners.length>=3?"Draw completed — three original winners selected":`${winners.length} of 3 original winners selected`;
+ $("drawBtn").disabled=!eligible.length||winners.length>=3||spinning;
+ $("drawBtn").textContent=winners.length>=3?"🏆 Original Draw Completed":`🎡 Draw ${["First","Second","Third"][winners.length]||"Next"} Winner`;
+ $("exportBtn").disabled=!allUnique.length;
+
+ const body=$("entries");
+ body.innerHTML="";
+ if(!eligible.length) {
+  body.innerHTML='<tr><td colspan="4">No remaining entries.</td></tr>';
+ } else {
+  eligible.forEach((e,i)=>{
+   const tr=document.createElement("tr");
+   [i+1,e.wing,e.flat,e.name].forEach(val=>{
+    const td=document.createElement("td");
+    td.textContent=val;
+    tr.appendChild(td);
+   });
+   body.appendChild(tr);
+  });
+ }
 }
 
-function renderAttendance(){
- $("attendancePanel").style.display=winners.length?"block":"none";
+function renderAttendance() {
+ const panel=$("attendancePanel");
+ panel.style.display=winners.length?"block":"none";
+
  const confirmed=winners.filter((w,i)=>attendance[i]==="Present").length;
  const needed=Math.max(0,3-confirmed);
- $("confirmedCount").textContent=confirmed;$("neededCount").textContent=needed;
- const body=$("attendanceRows");body.innerHTML="";
+ $("confirmedCount").textContent=confirmed;
+ $("neededCount").textContent=needed;
+
+ const body=$("attendanceRows");
+ body.innerHTML="";
+
  winners.forEach((w,i)=>{
   const tr=document.createElement("tr");
-  const label=document.createElement("td");label.textContent=i<3?`Original Winner ${i+1}`:`Replacement ${i-2}`;tr.appendChild(label);
-  const resident=document.createElement("td");resident.textContent=`${w.name} — Wing ${w.wing}, Flat ${w.flat}`;tr.appendChild(resident);
-  const statusCell=document.createElement("td"),select=document.createElement("select");select.className="attendance-select";
-  ["Pending","Present","Absent"].forEach(v=>{const op=document.createElement("option");op.value=v;op.textContent=v;select.appendChild(op)});
+  const label=i<3?`Original ${i+1}`:`Replacement ${i-2}`;
+
+  const name=document.createElement("td");
+  name.textContent=label;
+  tr.appendChild(name);
+
+  const resident=document.createElement("td");
+  resident.textContent=`${w.name} — Wing ${w.wing}, Flat ${w.flat}`;
+  tr.appendChild(resident);
+
+  const statusCell=document.createElement("td");
+  const select=document.createElement("select");
+  select.className="attendance-select";
+
+  ["Pending","Present","Absent"].forEach(v=>{
+   const opt=document.createElement("option");
+   opt.value=v;
+   opt.textContent=v;
+   select.appendChild(opt);
+  });
+
   select.value=attendance[i]||"Pending";
-  select.addEventListener("change",()=>{attendance[i]=select.value;if(selectionHistory[i])selectionHistory[i].status=select.value;renderAttendance()});
-  statusCell.appendChild(select);tr.appendChild(statusCell);
-  const action=document.createElement("td");action.textContent=attendance[i]==="Absent"?"Replacement required":attendance[i]==="Present"?"Confirmed":"Awaiting attendance";tr.appendChild(action);body.appendChild(tr);
+  select.addEventListener("change",()=>{
+   attendance[i]=select.value;
+   if(selectionHistory[i])selectionHistory[i].status=select.value;
+   renderAttendance();
+   renderWinnerList();
+  });
+
+  statusCell.appendChild(select);
+  tr.appendChild(statusCell);
+
+  const action=document.createElement("td");
+  if(attendance[i]==="Absent") {
+   action.innerHTML='<strong class="disqualified">Disqualified — Absent</strong><div class="small">This winner is no longer eligible. A replacement will be selected.</div>';
+  } else if(attendance[i]==="Present") {
+   action.innerHTML='<strong class="history-winner">Present — Confirmed</strong>';
+  } else {
+   action.textContent="Awaiting attendance";
+  }
+  tr.appendChild(action);
+  body.appendChild(tr);
  });
- const absent=winners.some((w,i)=>attendance[i]==="Absent");
- $("replacementBtn").disabled=spinning||needed===0||eligible.length===0||!absent;
+
+ $("replacementBtn").disabled=spinning||needed===0||eligible.length===0||!winners.some((w,i)=>attendance[i]==="Absent");
  $("replacementBtn").textContent=needed===0?"✅ Three Winners Confirmed":"🎡 Draw Replacement Winner";
- $("replacementStatus").textContent=needed===0?"Three winners are confirmed present. The final count is complete.":`${needed} more winner(s) must be confirmed present. Mark absent winners before drawing replacements.`;
+ $("replacementStatus").textContent=needed===0
+  ?"Three winners are confirmed present. The final winner count is complete."
+  :`${needed} more confirmed winner(s) needed. Mark absent winners before drawing replacements.`;
+
  $("selectionHistory").innerHTML="";
- selectionHistory.forEach(h=>{const li=document.createElement("li");li.className=h.status==="Absent"?"history-absent":h.status==="Present"?"history-winner":"";li.textContent=`${h.kind}: ${h.entry.name} — Wing ${h.entry.wing}, Flat ${h.entry.flat} — ${h.status}`;$("selectionHistory").appendChild(li)});
+ selectionHistory.forEach(h=>{
+  const li=document.createElement("li");
+  li.className=h.status==="Absent"?"history-absent":h.status==="Present"?"history-winner":"";
+  li.textContent=`${h.kind}: ${h.entry.name} — Wing ${h.entry.wing}, Flat ${h.entry.flat} — ${h.status}`;
+  if(h.status==="Absent") {
+   const badge=document.createElement("span");
+   badge.className="disqualified";
+   badge.textContent="Disqualified — Absent";
+   li.appendChild(document.createTextNode(" "));
+   li.appendChild(badge);
+  }
+  $("selectionHistory").appendChild(li);
+ });
 }
 
-function spinForWinner(isReplacement){
+function renderWinnerList() {
+ $("winnersList").innerHTML=winners.map((w,i)=>{
+  const status=attendance[i];
+  const label=i<3?"Original":"Replacement";
+  const badge=status==="Absent"?' <span class="disqualified">Disqualified — Absent</span>':status==="Present"?' <span class="history-winner">Present — Confirmed</span>':"";
+  return `<li><b>${esc(w.name)}</b> — Wing ${esc(w.wing)}, Flat ${esc(w.flat)} (${label})${badge}</li>`;
+ }).join("");
+}
+
+function spinForWinner(isReplacement) {
  if(spinning||!eligible.length)return;
- spinning=true;render();
- $("winner").classList.add("show");$("spinner").classList.add("show");$("trophy").style.display="none";
+ if(isReplacement&&!winners.some((w,i)=>attendance[i]==="Absent"))return;
+
+ spinning=true;
+ render();
+ $("winner").classList.add("show");
+ $("spinner").classList.add("show");
+ $("trophy").style.display="none";
  $("spinLabel").textContent=isReplacement?"Replacement draw is spinning…":"The lucky draw is spinning…";
- $("winnerName").textContent="Good luck!";$("winnerFlat").textContent="";$("winnerNo").textContent="";
+ $("winnerName").textContent="Good luck!";
+ $("winnerFlat").textContent="";
+ $("winnerNo").textContent="";
  $("winner").scrollIntoView({behavior:"smooth",block:"center"});
+
  let ticks=0;
  const timer=setInterval(()=>{
   const preview=eligible[Math.floor(Math.random()*eligible.length)];
-  $("winnerName").textContent=preview.name;$("winnerFlat").textContent=`Wing ${preview.wing} · Flat ${preview.flat}`;
-  if(++ticks>=28){
+  $("winnerName").textContent=preview.name;
+  $("winnerFlat").textContent=`Wing ${preview.wing} · Flat ${preview.flat}`;
+
+  if(++ticks>=28) {
    clearInterval(timer);
    const chosen=eligible.splice(Math.floor(Math.random()*eligible.length),1)[0];
+
    winners.push({...chosen,number:winners.length+1,kind:isReplacement?"Replacement":"Original"});
    attendance[winners.length-1]="Pending";
-   selectionHistory.push({entry:chosen,kind:isReplacement?"Replacement winner":"Original winner",status:"Pending"});
-   spinning=false;$("spinner").classList.remove("show");$("trophy").style.display="block";
-   $("spinLabel").textContent=isReplacement?"REPLACEMENT WINNER":`ORIGINAL WINNER ${Math.min(winners.length,3)}`;
-   $("winnerName").textContent=chosen.name;$("winnerFlat").textContent=`Wing ${chosen.wing} · Flat ${chosen.flat}`;
-   $("winnerNo").textContent=isReplacement?"Replacement selected — please verify attendance.":`Winner #${winners.length} · Congratulations!`;
-   $("winnersList").innerHTML=winners.map((w,i)=>`<li><b>${esc(w.name)}</b> — Wing ${esc(w.wing)}, Flat ${esc(w.flat)} (${i<3?"Original":"Replacement"})</li>`).join("");
-   $("status").textContent=isReplacement?"Replacement selected. Mark their attendance below.":"Winner selected. Continue until three original winners are drawn.";
+   selectionHistory.push({
+    entry:chosen,
+    kind:isReplacement?"Replacement winner":"Original winner",
+    status:"Pending"
+   });
+
+   spinning=false;
+   $("spinner").classList.remove("show");
+   $("trophy").style.display="block";
+   $("spinLabel").textContent=isReplacement?"REPLACEMENT WINNER":`WINNER ${winners.length} OF 3`;
+   $("winnerName").textContent=chosen.name;
+   $("winnerFlat").textContent=`Wing ${chosen.wing} · Flat ${chosen.flat}`;
+   $("winnerNo").textContent=isReplacement
+    ?"Replacement selected — please verify attendance."
+    :`Winner #${winners.length} — please verify attendance.`;
+
+   $("status").textContent=isReplacement
+    ?"Replacement selected. Mark their attendance in the Winner Attendance section."
+    :`Winner ${winners.length} selected. This entry is removed. ${eligible.length} entries remain.`;
+
+   renderWinnerList();
    render();
   }
  },100);
 }
 
-$("fileInput").addEventListener("change",async ev=>{
- const file=ev.target.files[0];if(!file)return;
- try{if(file.name.toLowerCase().endsWith(".csv"))importRows(parseCSV(await file.text()));else if(file.name.toLowerCase().endsWith(".xlsx"))importRows(await readXlsx(await file.arrayBuffer()));else throw Error("Choose an .xlsx or .csv file.")}
- catch(err){$("status").textContent=err.message||"Could not read the file.";$("viewBtn").disabled=true}
-});
-$("viewBtn").addEventListener("click",()=>showPreview());
-$("clearBtn").addEventListener("click",()=>{
- if(spinning)return;
- eligible=[];allUnique=[];rawRows=[];winners=[];attendance={};selectionHistory=[];totalValid=0;duplicateCount=0;
- $("fileInput").value="";$("viewBtn").disabled=true;$("preview").classList.remove("show");$("winner").classList.remove("show");$("status").textContent="Cleared. Choose the final registration file to begin.";render();
-});
-$("drawBtn").addEventListener("click",()=>{
- if(!eligible.length||winners.length>=3||spinning)return;
- if(!confirm(`Select original winner ${winners.length+1} of 3 from ${eligible.length} remaining entries?`))return;
- spinForWinner(false);
-});
 $("replacementBtn").addEventListener("click",()=>{
- if(spinning||!eligible.length||!winners.some((w,i)=>attendance[i]==="Absent"))return;
- if(!confirm("Draw a replacement for the absent winner(s)? The new selection will be added to the history."))return;
+ if(spinning||eligible.length===0)return;
+ if(!winners.some((w,i)=>attendance[i]==="Absent"))return;
+ if(!confirm("Draw a replacement winner for the absent winner(s)? Each new winner will be added to the history and cannot be selected twice."))return;
  spinForWinner(true);
 });
-$("exportBtn").addEventListener("click",()=>{
- const rows=[["Entry ID","Wing","Flat Number","Resident Name","Selection","Attendance"],
- ...allUnique.map((e,i)=>{
-  const wi=winners.findIndex(w=>w.wing===e.wing&&w.flat===e.flat);
-  return [i+1,e.wing,e.flat,e.name,wi<0?"Eligible":winners[wi].kind,wi<0?"":attendance[wi]||"Pending"];
- })];
- const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");
- const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
- const a=document.createElement("a");a.href=url;a.download="AROS_R13_Lucky_Draw_Results.csv";a.click();URL.revokeObjectURL(url);
+
+$("fileInput").addEventListener("change",async ev=>{
+ const file=ev.target.files[0];
+ if(!file)return;
+ try {
+  if(file.name.toLowerCase().endsWith(".csv")) {
+   importRows(parseCSV(await file.text()));
+  } else if(file.name.toLowerCase().endsWith(".xlsx")) {
+   importRows(await readXlsx(await file.arrayBuffer()));
+  } else {
+   throw Error("Choose an .xlsx or .csv file.");
+  }
+ } catch(err) {
+  $("status").textContent=err.message||"Could not read the file.";
+  $("viewBtn").disabled=true;
+ }
 });
+
+$("viewBtn").addEventListener("click",showPreview);
+
+$("clearBtn").addEventListener("click",()=>{
+ if(spinning)return;
+ eligible=[];
+ allUnique=[];
+ rawRows=[];
+ winners=[];
+ attendance={};
+ selectionHistory=[];
+ totalValid=0;
+ duplicateCount=0;
+ $("fileInput").value="";
+ $("viewBtn").disabled=true;
+ $("preview").classList.remove("show");
+ $("winner").classList.remove("show");
+ $("status").textContent="Cleared. Choose the final registration file to begin.";
+ render();
+});
+
+$("drawBtn").addEventListener("click",()=>{
+ if(!eligible.length||winners.length>=3||spinning)return;
+ if(!confirm(`Select original winner ${winners.length+1} of 3 from ${eligible.length} remaining entries? Confirm the registration list has been reviewed.`))return;
+ spinForWinner(false);
+});
+
+$("exportBtn").addEventListener("click",()=>{
+ const rows=[
+  ["Entry ID","Wing","Flat Number","Resident Name","Status"],
+  ...allUnique.map((e,i)=>{
+   const winnerIndex=winners.findIndex(w=>w.wing.toLowerCase()===e.wing.toLowerCase()&&w.flat.toLowerCase()===e.flat.toLowerCase());
+   let status="Eligible";
+   if(winnerIndex>=0) {
+    status=attendance[winnerIndex]==="Absent"?"Disqualified — Absent":attendance[winnerIndex]==="Present"?"Selected winner — Present":"Selected winner — Attendance pending";
+   }
+   return [i+1,e.wing,e.flat,e.name,status];
+  })
+ ];
+ const csv=rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(",")).join("\r\n");
+ const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="AROS_R13_Lucky_Draw_Results.csv";
+ a.click();
+ URL.revokeObjectURL(url);
+});
+
 $("printBtn").addEventListener("click",()=>window.print());
 render();
 </script>
